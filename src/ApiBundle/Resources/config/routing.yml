@@ -1,4 +1,8 @@
-api:
+api_gerant:
     resource: "@ApiBundle/Resources/config/routing/routing_gerant.yml"
     prefix:   /gerant
+
+api_vehicule:
+    resource: "@ApiBundle/Resources/config/routing/routing_vehicule.yml"
+    prefix:   /vehicule
 

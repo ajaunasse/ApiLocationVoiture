@@ -1,0 +1,7 @@
+vehicules:
+    resource: ApiBundle\Controller\VehiculeController
+    type:     rest
+
+get_vehicules:
+    path:  /vehicules/{idAgence}
+    defaults: { _controller: ApiBundle:Vehicule:getByAgence}

@@ -57,15 +57,7 @@ class Agence
      */
     private $cA;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Vehicule", mappedBy="agence")
-     */
-    private $vehicules;
 
-    public function __construct()
-    {
-        $vehicules = new ArrayCollection() ;
-    }
 
     /**
      * Get id
@@ -197,37 +189,4 @@ class Agence
         return $this->cA;
     }
 
-    /**
-     * Add vehicule
-     *
-     * @param \ApiBundle\Entity\Vehicule $vehicule
-     *
-     * @return Agence
-     */
-    public function addVehicule(\ApiBundle\Entity\Vehicule $vehicule)
-    {
-        $this->vehicules[] = $vehicule;
-
-        return $this;
-    }
-
-    /**
-     * Remove vehicule
-     *
-     * @param \ApiBundle\Entity\Vehicule $vehicule
-     */
-    public function removeVehicule(\ApiBundle\Entity\Vehicule $vehicule)
-    {
-        $this->vehicules->removeElement($vehicule);
-    }
-
-    /**
-     * Get vehicules
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getVehicules()
-    {
-        return $this->vehicules;
-    }
 }
