@@ -1,0 +1,4 @@
+api:
+    resource: "@ApiBundle/Resources/config/routing/routing_gerant.yml"
+    prefix:   /gerant
+

@@ -1,0 +1,8 @@
+gerants:
+    resource: ApiBundle\Controller\GerantController
+    type:     rest
+
+login:
+    path:  /login
+    defaults: { _controller: ApiBundle:Gerant:login}
+    methods: GET
