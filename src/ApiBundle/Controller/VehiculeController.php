@@ -9,13 +9,15 @@
 namespace ApiBundle\Controller;
 
 
+use ApiBundle\Entity\Agence;
 use ApiBundle\Entity\Vehicule;
+use ApiBundle\Form\VehiculeType;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use FOS\RestBundle\Controller\Annotations as Rest;
 class VehiculeController extends Controller
 {
     public function getByAgenceAction(Request $request, $idAgence){
@@ -44,17 +46,80 @@ class VehiculeController extends Controller
         $vehicule = new Vehicule();
         $em = $this->getDoctrine()->getManager() ;
         $agence = $em->getRepository('ApiBundle:Agence')->find($request->get('agence')) ;
+        $vehicule = $this->constructObjectVehicule($vehicule) ;
+
+        $em->persist($vehicule);
+        $em->flush();
+
+        return new JsonResponse(
+            array('ok' => true, 'message' => 'Vehicule créé'),
+            Response::HTTP_CREATED);
+
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     */
+    public function putVehiculesAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager() ;
+        $vehicule = $em->getRepository('ApiBundle:Vehicule')->find($id) ;
+        $agence = $em->getRepository('ApiBundle:Agence')->find($request->get('agence')) ;
+        if($vehicule && $agence) {
+
+            $vehicule = $this->constructObjectVehicule($vehicule) ;
+
+            $em->persist($vehicule);
+            $em->flush();
+
+            return new JsonResponse(
+                array('ok' => true, 'message' => 'Vehicule edité'),
+                Response::HTTP_CREATED);
+        } else {
+            return new JsonResponse(['message' => 'Le vehicule n\'existe pas'], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    /**
+     * DELETE VEHICULE
+     * @return array
+     * @Rest\Delete("/vehicules/{id}")
+     * @Rest\View(statusCode=204)
+     */
+    public function deleteVehiculesAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager() ;
+        $user = $em->getRepository('ApiBundle:Vehicule')->find($request->get('id'));
+
+        if ($user) {
+            $em->remove($user);
+            $em->flush();
+            return new JsonResponse(
+                array('ok' => true, 'message' => 'Vehicule supprimé'),
+                Response::HTTP_CREATED);
+        } else {
+            return new JsonResponse(['message' => 'Le vehicule n\'existe pas'], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+
+    /**
+     * @param Request $request
+     * @param Vehicule $vehicule
+     * @param Agence $agence
+     * @return Vehicule
+     */
+    private function constructObjectVehicule(Request $request, Vehicule $vehicule, Agence $agence) {
         $vehicule->setImmatriculation($request->get('immatriculation'))
             ->setMarque($request->get('marque'))
             ->setLibelle($request->get('libelle'))
             ->setCaracteristiques($request->get('caracteristiques'))
             ->setPrix($request->get('prix'))
-            ->setAgence($agence) ;
+            ->setImage($request->get('image'))
+            ->setAgence($agence);
 
-        $em->persist($vehicule);
-        $em->flush();
-
-        return new JsonResponse(array('ok' => 'Vehicule créer'), Response::HTTP_CREATED);
-
+        return $vehicule;
     }
+
 }

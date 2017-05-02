@@ -3,5 +3,5 @@ vehicules:
     type:     rest
 
 get_vehicules:
-    path:  /vehicules/{idAgence}
+    path:  /agence/vehicules/{idAgence}
     defaults: { _controller: ApiBundle:Vehicule:getByAgence}

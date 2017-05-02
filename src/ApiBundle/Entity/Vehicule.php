@@ -24,6 +24,13 @@ class Vehicule
     /**
      * @var string
      *
+     * @ORM\Column(name="image", type="string", length=255, unique=false)
+     */
+    private $image;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="immatriculation", type="string", length=10, unique=true)
      */
     private $immatriculation;
@@ -246,5 +253,29 @@ class Vehicule
     public function getAgence()
     {
         return $this->agence;
+    }
+
+    /**
+     * Set image
+     *
+     * @param string $image
+     *
+     * @return Vehicule
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }
