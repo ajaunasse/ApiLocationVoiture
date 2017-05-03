@@ -1,0 +1,3 @@
+clients:
+    resource: ApiBundle\Controller\ClientController
+    type:     rest

@@ -16,18 +16,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class GerantController extends Controller
+class GerantController extends GenericController
 {
 
     /**
      * @return array
+     * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/gerant/gerants
      */
     public function getGerantsAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $gerants = $em->getRepository('ApiBundle:Gerant')->findAll();
-
-        return array('gerants' => $gerants);
+        return array('gerants' =>  $this->getRepository('ApiBundle:Gerant')->findAll());
     }
 
     /**
@@ -39,29 +37,27 @@ class GerantController extends Controller
         return array('gerant' => $gerant);
     }
 
+    /**
+     * API LOGIN GERANT (Param url : email & password)
+     * @param Request $request
+     * @return JsonResponse
+     * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/gerant/login?email=louie54@yahoo.com&password=test
+     */
     public function loginAction(Request $request) {
-        $em = $this->getDoctrine()->getManager() ;
+        //Récupération des paramètres
         $email = $request->query->get('email') ;
         $password = $request->query->get('password') ;
-        $jsonResponse = [] ;
-        $gerant = $em->getRepository('ApiBundle:Gerant')->findOneByEmail($email);
+        //Query
+        $gerant = $this->getRepository('ApiBundle:Gerant')->findOneByEmail($email);
+
         if(empty($gerant)){
             return new JsonResponse(['message' => 'Gerant not found'], Response::HTTP_NOT_FOUND);
         }
-        if($gerant->getPassword() == $password) {
-            $ok = true ;
-        } else {
-            $ok = false;
-        }
+        //check password ok
+        $ok = $gerant->getPassword() == $password ;
+
         $jsonResponse = array('object' => $gerant, 'ok' => $ok);
-        // Récupération du view handler
-        $viewHandler = $this->get('fos_rest.view_handler');
 
-        // Création d'une vue FOSRestBundle
-        $view = View::create($jsonResponse);
-        $view->setFormat('json');
-
-        // Gestion de la réponse
-        return $viewHandler->handle($view);
+        return $this->handleView($jsonResponse, 'json');
     }
 }

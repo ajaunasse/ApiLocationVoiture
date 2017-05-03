@@ -18,38 +18,44 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-class VehiculeController extends Controller
+
+class VehiculeController extends GenericController
 {
+    /**
+     * Get all Vehicules by agence
+     * @param Request $request
+     * @param $idAgence
+     * @return mixed|JsonResponse
+     * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/vehicule/agence/vehicules/1
+     */
     public function getByAgenceAction(Request $request, $idAgence){
-        $em = $this->getDoctrine()->getManager() ;
-        $vehicules = $em->getRepository('ApiBundle:Vehicule')->findByAgence($idAgence) ;
+        $vehicules = $this->getRepository('ApiBundle:Vehicule')->findByAgence($idAgence) ;
         //Cas pas de voiture
         if(empty($vehicules)){
             return new JsonResponse(['message' => 'Aucun vehicules'], Response::HTTP_NOT_FOUND);
         }
-            // Récupération du view handler
-            $viewHandler = $this->get('fos_rest.view_handler');
 
-            // Création d'une vue FOSRestBundle
-            $view = View::create($vehicules);
-            $view->setFormat('json');
-
-            // Gestion de la réponse
-            return $viewHandler->handle($view);
+        return $this->handleView($vehicules, 'json') ;
     }
 
     /**
+     * Ajout d'un vehicule
+     * Requête type post
      * @param Request $request
      * @return JsonResponse
+     * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/vehicule/vehicules
+     * Params : immatriculation, marque, libelle, caracteristiques, prix, agence, image
      */
     public function postVehiculesAction(Request $request) {
         $vehicule = new Vehicule();
-        $em = $this->getDoctrine()->getManager() ;
-        $agence = $em->getRepository('ApiBundle:Agence')->find($request->get('agence')) ;
-        $vehicule = $this->constructObjectVehicule($vehicule) ;
+        $agence = $this->getRepository('ApiBundle:Agence')->find($request->get('agence')) ;
+        if(empty($agence)){
+            return new JsonResponse(['message' => 'L\'agence n\'existe pas'], Response::HTTP_NOT_FOUND);
+        }
+        $vehicule = $this->constructObjectVehicule($request, $vehicule, $agence) ;
 
-        $em->persist($vehicule);
-        $em->flush();
+        $this->getEm()->persist($vehicule);
+        $this->getEm()->flush();
 
         return new JsonResponse(
             array('ok' => true, 'message' => 'Vehicule créé'),
@@ -58,20 +64,22 @@ class VehiculeController extends Controller
     }
 
     /**
+     * Edit Vehicule
+     * Requête de type put
      * @param Request $request
      * @param $id
+     * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/vehicule/vehicules/1
+     * Params : immatriculation, marque, libelle, caracteristiques, prix, agence, image
      */
     public function putVehiculesAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getManager() ;
-        $vehicule = $em->getRepository('ApiBundle:Vehicule')->find($id) ;
-        $agence = $em->getRepository('ApiBundle:Agence')->find($request->get('agence')) ;
+        $vehicule = $this->getRepository('ApiBundle:Vehicule')->find($id) ;
+        $agence = $this->getRepository('ApiBundle:Agence')->find($request->get('agence')) ;
         if($vehicule && $agence) {
+            $vehicule = $this->constructObjectVehicule($request, $vehicule, $agence) ;
 
-            $vehicule = $this->constructObjectVehicule($vehicule) ;
-
-            $em->persist($vehicule);
-            $em->flush();
+            $this->getEm()->persist($vehicule);
+            $this->getEm()->flush();
 
             return new JsonResponse(
                 array('ok' => true, 'message' => 'Vehicule edité'),
@@ -83,18 +91,19 @@ class VehiculeController extends Controller
 
     /**
      * DELETE VEHICULE
+     * Requête type delete
      * @return array
      * @Rest\Delete("/vehicules/{id}")
      * @Rest\View(statusCode=204)
+     * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/vehicule/vehicules/4
      */
     public function deleteVehiculesAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager() ;
-        $user = $em->getRepository('ApiBundle:Vehicule')->find($request->get('id'));
+        $vehicule = $this->getRepository('ApiBundle:Vehicule')->find($request->get('id'));
 
-        if ($user) {
-            $em->remove($user);
-            $em->flush();
+        if ($vehicule) {
+            $this->getEm()->remove($vehicule);
+            $this->getEm()->flush();
             return new JsonResponse(
                 array('ok' => true, 'message' => 'Vehicule supprimé'),
                 Response::HTTP_CREATED);

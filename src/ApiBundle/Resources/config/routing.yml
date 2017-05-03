@@ -6,3 +6,7 @@ api_vehicule:
     resource: "@ApiBundle/Resources/config/routing/routing_vehicule.yml"
     prefix:   /vehicule
 
+api_client:
+    resource: "@ApiBundle/Resources/config/routing/routing_client.yml"
+    prefix:   /client
+
