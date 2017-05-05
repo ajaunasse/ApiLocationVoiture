@@ -71,16 +71,6 @@ class Client
      */
     private $email;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Location", mappedBy="vehicule")
-     */
-    private $locations;
-
-
-    public function __construct()
-    {
-        $locations = new ArrayCollection() ;
-    }
 
 
     /**
@@ -261,37 +251,6 @@ class Client
         return $this->email;
     }
 
-    /**
-     * Add location
-     *
-     * @param \ApiBundle\Entity\Location $location
-     *
-     * @return Client
-     */
-    public function addLocation(\ApiBundle\Entity\Location $location)
-    {
-        $this->locations[] = $location;
 
-        return $this;
-    }
 
-    /**
-     * Remove location
-     *
-     * @param \ApiBundle\Entity\Location $location
-     */
-    public function removeLocation(\ApiBundle\Entity\Location $location)
-    {
-        $this->locations->removeElement($location);
-    }
-
-    /**
-     * Get locations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLocations()
-    {
-        return $this->locations;
-    }
 }

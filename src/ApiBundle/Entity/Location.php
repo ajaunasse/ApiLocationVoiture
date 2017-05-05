@@ -38,16 +38,10 @@ class Location
     /**
      * @var string
      *
-     * @ORM\Column(name="prixTotalHt", type="decimal", precision=5, scale=2)
+     * @ORM\Column(name="prixTotal", type="decimal", precision=10, scale=2)
      */
-    private $prixTotalHt;
+    private $prixTotal;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="prixTotalTtc", type="decimal", precision=5, scale=2)
-     */
-    private $prixTotalTtc;
 
 
     /**
@@ -119,54 +113,7 @@ class Location
     {
         return $this->dateFinLocation;
     }
-
-    /**
-     * Set prixTotalHt
-     *
-     * @param string $prixTotalHt
-     *
-     * @return Location
-     */
-    public function setPrixTotalHt($prixTotalHt)
-    {
-        $this->prixTotalHt = $prixTotalHt;
-
-        return $this;
-    }
-
-    /**
-     * Get prixTotalHt
-     *
-     * @return string
-     */
-    public function getPrixTotalHt()
-    {
-        return $this->prixTotalHt;
-    }
-
-    /**
-     * Set prixTotalTtc
-     *
-     * @param string $prixTotalTtc
-     *
-     * @return Location
-     */
-    public function setPrixTotalTtc($prixTotalTtc)
-    {
-        $this->prixTotalTtc = $prixTotalTtc;
-
-        return $this;
-    }
-
-    /**
-     * Get prixTotalTtc
-     *
-     * @return string
-     */
-    public function getPrixTotalTtc()
-    {
-        return $this->prixTotalTtc;
-    }
+    
 
     /**
      * Set client
@@ -214,5 +161,29 @@ class Location
     public function getVehicule()
     {
         return $this->vehicule;
+    }
+
+    /**
+     * Set prixTotal
+     *
+     * @param string $prixTotal
+     *
+     * @return Location
+     */
+    public function setPrixTotal($prixTotal)
+    {
+        $this->prixTotal = $prixTotal;
+
+        return $this;
+    }
+
+    /**
+     * Get prixTotal
+     *
+     * @return string
+     */
+    public function getPrixTotal()
+    {
+        return $this->prixTotal;
     }
 }

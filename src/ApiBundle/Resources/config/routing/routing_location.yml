@@ -1,0 +1,5 @@
+locations:
+    resource: ApiBundle\Controller\LocationController
+    type:     rest
+
+

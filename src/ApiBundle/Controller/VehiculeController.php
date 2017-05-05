@@ -69,7 +69,7 @@ class VehiculeController extends GenericController
      * @param Request $request
      * @param $id
      * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/vehicule/vehicules/1
-     * Params : immatriculation, marque, libelle, caracteristiques, prix, agence, image
+     * Params : immatriculation, marque, libelle, caracteristiques, prix, agence, image, estloue
      */
     public function putVehiculesAction(Request $request, $id)
     {
@@ -92,7 +92,6 @@ class VehiculeController extends GenericController
     /**
      * DELETE VEHICULE
      * Requête type delete
-     * @return array
      * @Rest\Delete("/vehicules/{id}")
      * @Rest\View(statusCode=204)
      * Exemple : http://localhost:8080/ApiLocationVoiture/web/app_dev.php/api/vehicule/vehicules/4
@@ -126,6 +125,7 @@ class VehiculeController extends GenericController
             ->setCaracteristiques($request->get('caracteristiques'))
             ->setPrix($request->get('prix'))
             ->setImage($request->get('image'))
+            ->setEstLoue($request->get('estloue') == 'true')
             ->setAgence($agence);
 
         return $vehicule;

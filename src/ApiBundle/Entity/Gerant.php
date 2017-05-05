@@ -45,7 +45,7 @@ class Gerant
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=20)
+     * @ORM\Column(name="password", type="string", length=20    )
      */
     private $password;
 

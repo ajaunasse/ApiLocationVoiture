@@ -10,3 +10,6 @@ api_client:
     resource: "@ApiBundle/Resources/config/routing/routing_client.yml"
     prefix:   /client
 
+api_location:
+    resource: "@ApiBundle/Resources/config/routing/routing_location.yml"
+    prefix:   /location
