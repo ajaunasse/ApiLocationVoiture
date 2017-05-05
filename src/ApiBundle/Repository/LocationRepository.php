@@ -10,4 +10,15 @@ namespace ApiBundle\Repository;
  */
 class LocationRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getByAgence($idAgence) {
+        $query = $this->createQueryBuilder('l')
+                    ->leftJoin('l.client', 'c')
+                    ->leftJoin('l.vehicule', 'v')
+                    ->addSelect('c')
+                    ->addSelect('v')
+                    ->where('v.agence = :idAgence')
+                    ->setParameter('idAgence', $idAgence) ;
+        return $query->getQuery()->getResult() ;
+
+    }
 }

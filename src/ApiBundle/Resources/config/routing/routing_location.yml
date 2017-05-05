@@ -2,4 +2,6 @@ locations:
     resource: ApiBundle\Controller\LocationController
     type:     rest
 
-
+get_vehicules:
+    path:  /agence/locations/{idAgence}
+    defaults: { _controller: ApiBundle:Location:getByAgence}

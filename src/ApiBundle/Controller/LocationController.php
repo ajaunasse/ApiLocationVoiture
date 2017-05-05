@@ -54,8 +54,20 @@ class LocationController extends GenericController
        return new JsonResponse(
            array('ok' => true, 'message' => 'Location ajouté'),
            Response::HTTP_CREATED);
+   }
 
+    /**
+     * @param Request $request
+     * @param $idAgence
+     * @return mixed|JsonResponse
+     */
+   public function getByAgenceAction(Request $request, $idAgence) {
+        $locations = $this->getRepository('ApiBundle:Location')->getByAgence($idAgence) ;
+       if(empty($locations)){
+           return new JsonResponse(['message' => 'Aucune location'], Response::HTTP_NOT_FOUND);
+       }
 
+       return $this->handleView($locations, 'json') ;
    }
 
 }

@@ -42,10 +42,8 @@ class Location
      */
     private $prixTotal;
 
-
-
     /**
-     * @ORM\ManyToOne(targetEntity="Client", inversedBy="locations")
+     * @ORM\ManyToOne(targetEntity="Client")
      * @ORM\JoinColumn(name="client", referencedColumnName="id")
      */
     private $client ;
